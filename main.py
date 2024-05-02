@@ -23,7 +23,7 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/start_chat", methods=["GET", "POST"]):
+@app.route("/start_chat", methods=["GET", "POST"])
 def start_chat():
     if request.method == "POST":
         user_a = request.form["user_a"]
