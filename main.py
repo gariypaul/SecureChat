@@ -7,7 +7,8 @@ app.config["SECRET_KEY"] = "mysecret"
 socketio = SocketIO(app)
 
 #mock database
-data = {}
+data = {"Bob": "1234", "Alice": "1234"}
+
 
 #TODO: add a routes
 @app.route("/", methods=["GET", "POST"])
@@ -17,25 +18,29 @@ def login():
         name = request.form["name"]
         password  = request.form["password"]
         session["name"] = name
-        return redirect(url_for("chat"))
 
-        if not username:
-            return render_template("index.html", error="Invalid name")
+        if not name:
+            return render_template("login.html", error="Invalid name")
         if not password:
-            return render_template("index.html", error="Invalid password")
+            return render_template("login.html", error="Invalid password")
 
+        if authenticate(name, password):
+            return redirect(url_for("start_chat"))
+        else:
+            return render_template("login.html", error="Invalid credentials")
+        
     return render_template("login.html")
 
 @app.route("/start_chat", methods=["GET", "POST"])
 def start_chat():
     if request.method == "POST":
-        user_a = request.form["user_a"]
+        user_a = session["name"]
         user_b = request.form["user_b"]
 
         #generate a unique chat id using sha256 hash using user_a and user_b names
         chat_id = hashlib.sha256(f"{user_a}{user_b}".encode()).hexdigest()
         return redirect(url_for("chat", chat_id=chat_id))
-    return render_template("start_chat.html")
+    return render_template("start_chat.html", users = data.keys())
 
 @app.route("/chat/<chat_id>")
 def chat(chat_id):
@@ -43,6 +48,10 @@ def chat(chat_id):
 
 #TODO: add socketIO event handlers
 
+def authenticate(name, password):
+    if name in data:
+        return data[name] == password
+    return False
 
 if __name__ == "__main__":
     socketio.run(app)   #run the app

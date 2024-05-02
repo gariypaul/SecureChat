@@ -6,18 +6,17 @@ body{
 }
 #root{
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    padding-block: 10px;
 }
 
-#log-container{
+#main-container{
     align-items: center;
     justify-content: center;
+    text-align: center;
     display: flex;
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
 }
 
 #login-form{
@@ -26,7 +25,8 @@ body{
     border-radius: 10px;
     background-color: white;
     box-shadow: 0 0 10px 0 black;
-
+    width: 50%;
+    height: 75%;
 }
 
 #name{
@@ -53,5 +53,19 @@ body{
     cursor: pointer;
     border: none;
     width: 100px;
+    height: 50px;
+}
+#user-list{
+    justify-content: center;
+    align-items: center;
+}
+.start-chat-button{
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(245, 245, 245);
+    cursor: pointer;
+    border: none;
+    width: 75%;
     height: 50px;
 }
