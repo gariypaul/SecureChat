@@ -1,0 +1,21 @@
+body{
+    font-family: 'Courier New', Courier, monospace;
+    background-color: beige;
+    min-height: 100vh;
+    display: flex;
+}
+#log-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+#login-form{
+    margin: auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 10px 0 black;
+
+}
