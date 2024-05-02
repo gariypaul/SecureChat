@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, send
 import hashlib
 
-app = Flask(__name__, static_folder="/")
+app = Flask(__name__)
 app.config["SECRET_KEY"] = "mysecret"
 socketio = SocketIO(app)
 
