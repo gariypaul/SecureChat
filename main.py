@@ -11,7 +11,8 @@ data = {}
 
 #TODO: add a routes
 @app.route("/", methods=["GET", "POST"])
-def index():
+def login():
+    #TODO: Edit post request to add encryption 
     if request.method == "POST":
         name = request.form["name"]
         password  = request.form["password"]
@@ -20,8 +21,10 @@ def index():
 
         if not username:
             return render_template("index.html", error="Invalid name")
+        if not password:
+            return render_template("index.html", error="Invalid password")
 
-    return render_template("index.html")
+    return render_template("login.html")
 
 @app.route("/start_chat", methods=["GET", "POST"])
 def start_chat():
