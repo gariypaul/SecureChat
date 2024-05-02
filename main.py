@@ -8,6 +8,7 @@ socketio = SocketIO(app)
 
 #mock database
 data = {"Bob": "1234", "Alice": "1234"}
+messages = {}
 
 
 #TODO: add a routes
@@ -39,12 +40,14 @@ def start_chat():
 
         #generate a unique chat id using sha256 hash using user_a and user_b names
         chat_id = hashlib.sha256(f"{user_a}{user_b}".encode()).hexdigest()
-        return redirect(url_for("chat", chat_id=chat_id))
-    return render_template("start_chat.html", users = data.keys())
+        return redirect(url_for("chat", chat_id=chat_id, userb=user_b))
+    return render_template("start_chat.html", users = data.keys(), current_user=session["name"])
 
 @app.route("/chat/<chat_id>")
 def chat(chat_id):
-    return render_template("chat.html", chat_id=chat_id)
+    if chat_id not in messages:
+        messages[chat_id] = []
+    return render_template("chat.html", chat_id=chat_id, messages=['Test message','Test message 2'])
 
 #TODO: add socketIO event handlers
 

@@ -3,12 +3,13 @@
     <h1>Start Chat</h1>
     <div id="user-list">
         {%for user in users%}
+        {%if user != current_user%}
         <form  method="post">
             <div class="user">
                 <button class="start-chat-button" name="user_b" value="{{user}}">{{user}}</button>
             </div>
         </form>
-        
+        {%endif%}
         {%endfor%}
     </div>
 </div>  
