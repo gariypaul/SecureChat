@@ -17,14 +17,16 @@
     {%endfor%}
     </div>
     <div id="message-text">
-        <input
-            type="text"
-            placeholder="Type your message here"
-            id = "message-input"
-            name="message"
-            required
-        >
-        <button type="submit" id="send-message">Send</button>
+       <form id="message-form" action="{{ url_for('chat', chat_id=chat_id) }}" method="POST">
+            <input
+                type="text"
+                placeholder="Type your message here"
+                id = "message-input"
+                name="message"
+                required
+            >
+            <button type="submit" id="send-message">Send</button>
+       </form>
     </div>
     
 </div>

@@ -44,11 +44,17 @@ def start_chat():
         return redirect(url_for("chat", chat_id=chat_id))
     return render_template("start_chat.html", users = data.keys(), current_user=session["name"])
 
-@app.route("/chat/<chat_id>")
+@app.route("/chat/<chat_id>", methods=["GET", "POST"])
 def chat(chat_id):
     if chat_id not in messages:
         messages[chat_id] = []
-    return render_template("chat.html", chat_id=chat_id, messages=[["Bob",'Test message 1'],["Alice","Test message 2"]],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
+    if request.method == "POST":
+        user_a = session["name"]
+        message = request.form["message"]
+        messages[chat_id].append([user_a, message])
+        return redirect(url_for('chat', chat_id=chat_id))
+    
+    return render_template("chat.html", chat_id=chat_id, messages=messages[chat_id],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
 
 #TODO: add socketIO event handlers
 
