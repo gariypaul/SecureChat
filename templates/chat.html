@@ -4,13 +4,17 @@
 <div id="chat-container">
     <h1>{{user_b}}</h1>
     <div id="chat-messages">
+    {%for message in messages%}
+    {%if message[0] == current_user%}
         <div class="current-usermessage">
-            <p>Hi</p>
+            <p>{{message[1]}}</p>
         </div>
+    {%else%}
         <div class="other-usermessage">
-            <p>Hello</p>
+            <p>{{message[1]}}</p>
         </div>
-       
+    {%endif%}
+    {%endfor%}
     </div>
     <div id="message-text">
         <input

@@ -48,7 +48,7 @@ def start_chat():
 def chat(chat_id):
     if chat_id not in messages:
         messages[chat_id] = []
-    return render_template("chat.html", chat_id=chat_id, messages=['Test message','Test message 2'],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
+    return render_template("chat.html", chat_id=chat_id, messages=[["Bob",'Test message 1'],["Alice","Test message 2"]],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
 
 #TODO: add socketIO event handlers
 
