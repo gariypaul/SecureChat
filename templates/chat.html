@@ -3,16 +3,14 @@
 {%block chatmessages%}
 <div id="chat-container">
     <h1>{{user_b}}</h1>
-    <div id="chat-subsection">
-        <h2>{{user_b}}</h2>
-        <a href="/start_chat" id="leave-chat">Back</a>
-    </div>
     <div id="chat-messages">
-        
-        <div class="message-cont">
-            <ul id="messages"></ul>
+        <div class="current-usermessage">
+            <p>Hi</p>
         </div>
-        
+        <div class="other-usermessage">
+            <p>Hello</p>
+        </div>
+       
     </div>
     <div id="message-text">
         <input
@@ -24,6 +22,7 @@
         >
         <button type="submit" id="send-message">Send</button>
     </div>
+    
 </div>
 
 {%endblock%}

@@ -37,17 +37,18 @@ def start_chat():
     if request.method == "POST":
         user_a = session["name"]
         user_b = request.form["user_b"]
+        session["user_b"] = user_b
 
         #generate a unique chat id using sha256 hash using user_a and user_b names
         chat_id = hashlib.sha256(f"{user_a}{user_b}".encode()).hexdigest()
-        return redirect(url_for("chat", chat_id=chat_id, userb=user_b))
+        return redirect(url_for("chat", chat_id=chat_id))
     return render_template("start_chat.html", users = data.keys(), current_user=session["name"])
 
 @app.route("/chat/<chat_id>")
 def chat(chat_id):
     if chat_id not in messages:
         messages[chat_id] = []
-    return render_template("chat.html", chat_id=chat_id, messages=['Test message','Test message 2'],users = data.keys(),current_user=session["name"])
+    return render_template("chat.html", chat_id=chat_id, messages=['Test message','Test message 2'],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
 
 #TODO: add socketIO event handlers
 
