@@ -18,8 +18,9 @@
        </form>
     </div>
     <script type="text/JavaScript">
-        var socketio = io.connect("http://" + document.domain + ":" + location.port);
         var chat_id = "{{chat_id}}";
+        var socketio = io();
+       
         
         socketio.emit('join', {chat_id: chat_id});
        
@@ -27,7 +28,6 @@
             var message = data.message;
             var name = data.user;
             var chat_id = data.chat_id;
-            if (chat_id == chat_id){
                 var messageDiv = document.createElement("div");
                 if (name == "{{current_user}}"){
                     messageDiv.className = "current-usermessage";
@@ -38,7 +38,6 @@
                 messageP.innerHTML = message;
                 messageDiv.appendChild(messageP);
                 document.getElementById("chat-messages").appendChild(messageDiv);
-            }
         });
         function sendMessage(event){
             event.preventDefault();

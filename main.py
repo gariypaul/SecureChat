@@ -40,7 +40,7 @@ def start_chat():
         session["user_b"] = user_b
 
         #generate a unique chat id using sha256 hash using user_a and user_b names
-        chat_id = hashlib.sha256(f"{user_a}{user_b}".encode()).hexdigest()
+        chat_id = generate_chat_id(user_a, user_b)
         return redirect(url_for("chat", chat_id=chat_id))
     return render_template("start_chat.html", users = data.keys(), current_user=session["name"])
 
@@ -71,6 +71,12 @@ def handle_send_message(data):
     rooms[chat_id].append([user_a, message])
     emit('message', {"user": user_a, "message": message}, room=chat_id)
 
+def generate_chat_id(user_a, user_b):
+    user_a_cleaned = user_a.strip().lower()
+    user_b_cleaned = user_b.strip().lower()
+    sorted_users = sorted([user_a_cleaned, user_b_cleaned])
+    chat_id = hashlib.sha256(f"{sorted_users[0]}{sorted_users[1]}".encode()).hexdigest()
+    return chat_id
 
 def authenticate(name, password):
     if name in data:
