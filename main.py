@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, session
-from flask_socketio import SocketIO, join_room, leave_room, send
+from flask_socketio import SocketIO, join_room, leave_room, emit
 import hashlib
 
 app = Flask(__name__)
@@ -8,7 +8,7 @@ socketio = SocketIO(app)
 
 #mock database
 data = {"Bob": "1234", "Alice": "1234"}
-messages = {}
+rooms = {}
 
 
 #TODO: add a routes
@@ -46,17 +46,31 @@ def start_chat():
 
 @app.route("/chat/<chat_id>", methods=["GET", "POST"])
 def chat(chat_id):
-    if chat_id not in messages:
-        messages[chat_id] = []
-    if request.method == "POST":
-        user_a = session["name"]
-        message = request.form["message"]
-        messages[chat_id].append([user_a, message])
-        return redirect(url_for('chat', chat_id=chat_id))
+    if chat_id not in rooms:
+        rooms[chat_id] = []
+  
+        
     
-    return render_template("chat.html", chat_id=chat_id, messages=messages[chat_id],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
+    return render_template("chat.html", chat_id=chat_id, messages=rooms[chat_id],users = data.keys(),current_user=session["name"], user_b=session["user_b"])
 
-#TODO: add socketIO event handlers
+#TODO: add socketIO event handlers\
+@socketio.on("join")
+def handle_join(data):
+    chat_id = data["chat_id"]
+    join_room(chat_id)
+    
+    
+
+@socketio.on("send_message")
+def handle_send_message(data):
+    chat_id = data["chat_id"]
+    user_a = session["name"]
+    if chat_id not in rooms:
+        rooms[chat_id] = []
+    message = data["message"]
+    rooms[chat_id].append([user_a, message])
+    emit('message', {"user": user_a, "message": message}, room=chat_id)
+
 
 def authenticate(name, password):
     if name in data:

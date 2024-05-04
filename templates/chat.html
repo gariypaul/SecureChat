@@ -1,20 +1,9 @@
 {%extends 'start_chat.html'%} 
 
 {%block chatmessages%}
+<h1 class="user-title">{{user_b}}</h1>
 <div id="chat-container">
-    <h1>{{user_b}}</h1>
     <div id="chat-messages">
-    {%for message in messages%}
-    {%if message[0] == current_user%}
-        <div class="current-usermessage">
-            <p>{{message[1]}}</p>
-        </div>
-    {%else%}
-        <div class="other-usermessage">
-            <p>{{message[1]}}</p>
-        </div>
-    {%endif%}
-    {%endfor%}
     </div>
     <div id="message-text">
        <form id="message-form" action="{{ url_for('chat', chat_id=chat_id) }}" method="POST">
@@ -25,10 +14,43 @@
                 name="message"
                 required
             >
-            <button type="submit" id="send-message">Send</button>
+            <button type="submit" id="send-message" onclick="sendMessage(event)">Send</button>
        </form>
     </div>
-    
+    <script type="text/JavaScript">
+        var socketio = io.connect("http://" + document.domain + ":" + location.port);
+        var chat_id = "{{chat_id}}";
+        
+        socketio.emit('join', {chat_id: chat_id});
+       
+        socketio.on("message", function(data){
+            var message = data.message;
+            var name = data.user;
+            var chat_id = data.chat_id;
+            if (chat_id == chat_id){
+                var messageDiv = document.createElement("div");
+                if (name == "{{current_user}}"){
+                    messageDiv.className = "current-usermessage";
+                }else{
+                    messageDiv.className = "other-usermessage";
+                }
+                var messageP = document.createElement("p");
+                messageP.innerHTML = message;
+                messageDiv.appendChild(messageP);
+                document.getElementById("chat-messages").appendChild(messageDiv);
+            }
+        });
+        function sendMessage(event){
+            event.preventDefault();
+            var message = document.getElementById("message-input").value;
+            if (message == ""){
+                return;
+            }
+            socketio.emit('send_message', {chat_id:"{{chat_id}}", message: message, name: "{{current_user}}"});
+            document.getElementById("message-input").value = "";
+        }
+
+    </script>
 </div>
 
 {%endblock%}

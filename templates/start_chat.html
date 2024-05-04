@@ -4,18 +4,26 @@
         {%block userlist%}
         <h1>SecureChat</h1>
         <div >
-            {%for user in users%}
-            {%if user != current_user%}
-            <form  method="post" action="{{ url_for('start_chat') }}" class="user-card">
-                <button id="user-btn" name="user_b" value="{{user}}">{{user}}</button>
-            </form>
-            {%endif%}
-            {%endfor%}
+            <ul class="list-unstyled chat-list mt-2 mb-0">
+                {%for user in users%}
+                {%if user != current_user%}
+                <li class="clearfix">
+                    <form  method="post" action="{{ url_for('start_chat') }}" class="user-card">
+                        <button id="user-btn" name="user_b" value="{{user}}">{{user}}</button>
+                    </form>
+                </li>
+                {%endif%}
+                {%endfor%}
+            </ul>
         </div>
         {%endblock userlist%}
     </div>
     <div class="right-column">
         {%block chatmessages%} {%endblock%}
     </div>
+    <script type="text/javascript">
+
+        
+    </script>
 </div>  
 {%endblock%}
