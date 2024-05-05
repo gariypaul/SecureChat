@@ -21,13 +21,88 @@
         var chat_id = "{{chat_id}}";
         var socketio = io();
        
-        
+        async function decryptMessage(encryptedMesssage, salt, password) {
+            const enc = new TextEncoder();
+
+            //convert base64 to ArrayBuffer
+            const saltArrayBuffer = base64ToArrayBuffer(salt);
+            const encryptedMessageArrayBuffer = base64ToArrayBuffer(encryptedMesssage);
+
+            //derive key from password and salt
+            const keyMaterial = await window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                {name: "PBKDF2"},
+                false,
+                ["deriveKey"]
+            );
+
+            const key = await window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: saltArrayBuffer,
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                {name: "AES-CBC", length: 256},
+                true,
+                ["decrypt"]
+            );
+
+            const exportedKey = await window.crypto.subtle.exportKey("raw", key);
+            console.log("Derived Key (Hex):", bufferToHex(exportedKey));
+            
+            const iv = encryptedMessageArrayBuffer.slice(0, 16);
+            const encryptedMessage = encryptedMessageArrayBuffer.slice(16);
+            //decrypt message
+            try{
+                const decryptedMessage = await window.crypto.subtle.decrypt(
+                    {
+                        name: "AES-CBC",
+                        iv: iv
+                    },
+                    key,
+                    encryptedMessage
+                );
+                return new TextDecoder().decode(decryptedMessage)
+            }catch(e){
+                if (e.name == "OperationError") {
+                    alert("Incorrect password or corrupted data");
+                } else {
+                    alert("Unknown error");
+                }
+                return;
+            }
+          
+
+            
+        }
+        function bufferToHex(buffer) {
+            return Array.from(new Uint8Array(buffer))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function base64ToArrayBuffer(base64){
+            const binaryString = window.atob(base64);
+
+            const binaryLen = binaryString.length;
+            const bytes = new Uint8Array(binaryLen);
+            for (let i = 0; i < binaryLen; i++){
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+
+        }
+
         socketio.emit('join', {chat_id: chat_id});
        
-        socketio.on("message", function(data){
-            var message = data.message;
+        socketio.on("message", async function(data){
+            const passwordInput = prompt("Please enter your password:").trim();
+            const password = parseInt(passwordInput, 10);
+            var message = await decryptMessage(data.message, data.salt, password);
             var name = data.user;
-            var chat_id = data.chat_id;
                 var messageDiv = document.createElement("div");
                 if (name == "{{current_user}}"){
                     messageDiv.className = "current-usermessage";
@@ -35,8 +110,11 @@
                     messageDiv.className = "other-usermessage";
                 }
                 var messageP = document.createElement("p");
+                var encryptedMessageP = document.createElement("p");
+                encryptedMessageP.innerHTML = "Encrypted Message: " + data.message;
                 messageP.innerHTML = message;
                 messageDiv.appendChild(messageP);
+                messageDiv.appendChild(encryptedMessageP);
                 document.getElementById("chat-messages").appendChild(messageDiv);
         });
         function sendMessage(event){
