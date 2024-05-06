@@ -1,12 +1,14 @@
 body, html {
     height: 100vh;
     margin: 0;
-    background-color: #ffffff; /* Beige background */
+    background: rgb(238,174,202);
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 }
 .main-container {
     height: 100vh;
-    background-color: blanchedalmond;
-    display: flex;
+    background: rgb(238,174,202);
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    
 }
 .centered-form{
     min-height: 100vh;
@@ -36,23 +38,27 @@ body, html {
     display: flex;
     flex-direction: column;
     flex: 4;
-    padding: 20px;
-    background-color: #ffffff ;
+    background: rgb(238,174,202);
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    position: relative;
 }
 
 .left-column{
     flex:2;
-    display: flex;
+    display:block;
     flex-direction: column;
-    padding:20px;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
     box-shadow: 50px 10px 0 0 rgb(0, 0, 0);
     
 }
 .user-card{
     
-    width: 100%;
+    width: 30rem;
     height: 50px;
     justify-content: center;
+    align-self: center;
     
 }
 
@@ -77,21 +83,45 @@ body, html {
     min-width: 20%;
     height: fit-content;
 }
+.user-title{
+    font-weight: bold;
+    font-style: oblique;
+    background: rgb(255, 255, 255);
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    color: #000000;
+    
+}
+.app-title{
+    font-weight: bold;
+    font-style: oblique;
+    background: rgb(255, 255, 255);
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    color: #000000;
+    
+}
+
+
+.clearfix{
+    margin: 10px;
+}
 #message-form{
     width: 100%;
 }
 #chat-container{
     min-height: 100vh;
-    position:relative
+    position:relative;
+    align-self: center;
+    min-width: 90%;
 }
-#chat-container > h1{
-    position:sticky;
-    top: 0; /* Stick to the top of the viewport */
-    background: #f7f7f7; /* Ensure the background isn't transparent */
-    z-index: 1; /* Make sure it's above scrolled content */
-    padding: 10px; /* Optional for better spacing */
-    margin-bottom: 10px; /* Space between header and messages */
-}
+
 #chat-messages{
     flex-grow: 1;
     display: flex;
@@ -99,9 +129,10 @@ body, html {
     overflow-y: auto;
     height: 100%;
     padding: 10px;
-    background-color: blanchedalmond;
+    background-color: rgb(255, 255, 241);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
 }
 .abstitle{
     position: fixed;
@@ -116,9 +147,8 @@ body, html {
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow upwards */
 }
 #message-input{
-    width: 70%;
+    width: 79%;
     height: 100%;
-    border-bottom-left-radius: 15px;
     flex-grow: 1;
     border: none;
     background-color:#f7f7f7;
@@ -127,7 +157,6 @@ body, html {
 #send-message{
     width: 20%;
     height: 100%;
-    border-bottom-right-radius: 15px;
     border: none;
     background-color: rgb(202, 186, 152);
 
@@ -136,9 +165,8 @@ body, html {
     border: none;
     width: 100%;
     height: 100%;
-    background-color: #ffffff;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    background-color: #d7d3d3;
+    
     border-radius: 15px;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
 }
